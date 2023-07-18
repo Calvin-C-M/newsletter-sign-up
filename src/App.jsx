@@ -6,7 +6,7 @@ import { useState } from "react";
 function App() {
   const [email, setEmail] = useState("")
   const [error, setError] = useState(false)
-  const [success, setSuccess] = useState(true)
+  const [success, setSuccess] = useState(false)
 
   const validateEmail = () => {
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -15,9 +15,14 @@ function App() {
     setSuccess(emailIsValid)
   }
 
+  const dismissMessage = () => {
+    setEmail("")
+    setSuccess(false)
+  }
+
   return (
     <div className="App flex h-screen">
-      <section className={ ((!success) ? "hidden" : "") + " m-auto max-w-sm bg-white rounded-2xl p-12 flex flex-col gap-5 text-dark-slate-grey"}>
+      <section className={((!success) ? "hidden" : "") + " m-auto max-w-sm bg-white rounded-2xl p-12 flex flex-col gap-5 text-dark-slate-grey transition-all duration-100"}>
         <img 
           src={SuccessLogo}
           alt="Success"
@@ -25,13 +30,13 @@ function App() {
         />
         <h1 className="text-[40px] font-bold">Thanks for subscribing!</h1>
         <p>
-          A confirmation email has been sent to <span>{email}</span>. Please open it and click the button inside to confirm your subscription
+          A confirmation email has been sent to <span className="font-bold">{email}</span>. Please open it and click the button inside to confirm your subscription
         </p>
-        <button onClick={() => setSuccess(false)} className="font-bold bg-dark-slate-grey text-white py-3 rounded-lg hover:bg-tomato transition-all duration-100">
+        <button onClick={dismissMessage} className="font-bold bg-dark-slate-grey text-white py-3 rounded-lg hover:bg-tomato transition-all duration-100">
           Dismiss message
         </button>
       </section>
-      <section className={((success) ? "hidden" : "") + ' m-auto max-w-xl bg-white rounded-2xl p-3 grid grid-cols-2 gap-3'}>
+      <section className={((success) ? "hidden" : "") + ' m-auto max-w-xl bg-white rounded-2xl p-3 grid grid-cols-2 gap-3 transition-all duration-100'}>
         <section className="py-6 px-5 flex flex-col gap-5 text-dark-slate-grey">
           <h1 className="text-[36px] font-bold">Stay updated!</h1>
           <p>Join 60,000+ product managers receiving monthly updates on:</p>
@@ -63,6 +68,7 @@ function App() {
               type="text" 
               id="email"
               name="email"
+              value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="email@company.com"
               className={
